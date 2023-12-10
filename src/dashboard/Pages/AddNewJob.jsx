@@ -22,9 +22,8 @@ const AddNewJob = () => {
         const salary = form.salary.value;
         const experience = form.experience.value;
         const jobLocation = form.jobLocation.value;
-        const cont = content;
         const skill = selected?.map(slc => slc)
-        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, cont, skills: skill }
+        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, content, skill: skill }
 
         axiosSecure.post('/newJob', dataToInsert)
             .then(data => {
@@ -106,6 +105,7 @@ const AddNewJob = () => {
                     }
                 </div>
             </form>
+            {content}
         </Box>
     );
 };

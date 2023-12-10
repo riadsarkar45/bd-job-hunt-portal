@@ -2,14 +2,15 @@ import { useContext, useEffect } from "react";
 import useAxiosSecure from "../../../../../src/components/Hooks/useAxiosSecure"
 import { useState } from "react";
 import { AuthContext } from '../../../../dashboard/authProvider/AuthProvider';
-
+import { FaUserCheck } from "react-icons/fa";
+import { Link } from "react-router-dom";
 const AllJobSearch = ({ data }) => {
-    const { type, salary, jobLocation, cont, skill, roleName } = data;
+    // from job distructer
+    const { jobLocation, skill, roleName, _id } = data;
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
     const [mappedUser, setMappedUser] = useState({})
-    const [filterUser, setFilterUser] = useState([])
     const [filt, setFilt] = useState({})
     const [skilll, setSkilll] = useState([])
     const [userSkill, setUserSkill] = useState([])
@@ -41,7 +42,6 @@ const AllJobSearch = ({ data }) => {
     }, [skills, skill, skilll, loggedInUser])
 
     useEffect(() => {
-        // Use the updated state directly
 
 
         // job requirement
@@ -70,11 +70,11 @@ const AllJobSearch = ({ data }) => {
                     <>Loading</>
                 ) : (
                     isMatch?.length <= 0 ? (
-                        <>ddd</>
+                        null
 
                     ) : (
-                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-1 w-[31%]">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 w-[26%] mb-3 mt-3">
+                            <FaUserCheck />
                             <span>Your profile match this job</span>
                         </div>
                     )
@@ -84,7 +84,11 @@ const AllJobSearch = ({ data }) => {
 
             <p>Google</p>
             <p>{jobLocation}</p>
-
+            <div className="mt-4">
+                <Link to={`/detail/${_id}`}>
+                    <button className="btn btn-sm btn-outline btn-primary">Learn More</button>
+                </Link>
+            </div>
         </div>
     );
 };
