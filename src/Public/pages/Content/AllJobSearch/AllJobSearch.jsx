@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AuthContext } from '../../../../dashboard/authProvider/AuthProvider';
 
 const AllJobSearch = ({ data }) => {
-    const { type, salary, jobLocation, cont, skill } = data;
+    const { type, salary, jobLocation, cont, skill, roleName } = data;
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
@@ -21,8 +21,11 @@ const AllJobSearch = ({ data }) => {
         axiosSecure.get('/users')
             .then(res => {
                 setLoggedInUser(res.data);
+                setMathLoading(false)
+
             });
-    }, []);
+
+    }, [axiosSecure]);
 
     useEffect(() => {
         //const userEmail = loggedInUser.length > 0 ? loggedInUser[0].email : null;
@@ -30,11 +33,16 @@ const AllJobSearch = ({ data }) => {
     }, [loggedInUser])
 
     useEffect(() => {
-        loggedInUser?.map(user => console.log(user))
+        loggedInUser?.map(user => user)
         const em = loggedInUser?.filter((use) => use.emails === user?.email)
-        setFilterUser(em)
-        console.log(em)
-        filterUser?.map(u => setFilt(u))
+        const updatedFilterUser = em?.[0] || {};
+        setFilt(updatedFilterUser);
+
+    }, [skills, skill, skilll, loggedInUser])
+
+    useEffect(() => {
+        // Use the updated state directly
+
 
         // job requirement
         setSkilll(
@@ -44,24 +52,18 @@ const AllJobSearch = ({ data }) => {
         setUserSkill(
             skills?.map((sks) => (sks.label))
         )
-        //skills?.map((sks) => console.log(sks))
 
         const jobSki = skilll
         const userSki = userSkill
         const matching = jobSki?.filter((skillls) => userSki?.includes(skillls));
         setMatch(matching)
         setMathLoading(false)
-        console.log(matching)
-    }, [loggedInUser, skills, filterUser, skill, skilll, user?.email, userSkill])
+    }, [skill, skills, userSkill])
 
     //console.log(isMatch)
     return (
         <div className="bg-gray-50 rounded-lg shadow-md mt-4 p-5">
-            <h2 className="text-3xl">{type}</h2>
-            <p>Google</p>
-            <p>{jobLocation}</p>
-
-
+            <h2 className="text-3xl">{roleName}</h2>
 
             {
                 isMatchLoading ? (
@@ -71,7 +73,7 @@ const AllJobSearch = ({ data }) => {
                         <>ddd</>
 
                     ) : (
-                        <div role="alert" className="alert alert-success p-1 w-[31%]">
+                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-1 w-[31%]">
                             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             <span>Your profile match this job</span>
                         </div>
@@ -80,7 +82,8 @@ const AllJobSearch = ({ data }) => {
                 )
             }
 
-
+            <p>Google</p>
+            <p>{jobLocation}</p>
 
         </div>
     );
