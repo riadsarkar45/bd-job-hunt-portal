@@ -13,18 +13,27 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../../dashboard/authProvider/AuthProvider';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
 
-function FrontHome(props) {
+function Header(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-
+  const { user, logOut } = useContext(AuthContext)
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        navigate("/login")
+      })
+      .catch(error => console.error(error))
+  }
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -32,13 +41,40 @@ function FrontHome(props) {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton sx={{ textAlign: 'center' }}>
+            <Link to="/">
+              <Button sx={{ color: '#fff' }}>
+                Home
+              </Button>
+            </Link>
+            {
+              user ? (
+
+                <>
+                  <Link onClick={handleLogout}>
+                    <Button sx={{ color: '#fff' }}>
+                      Logout
+                    </Button>
+                  </Link>
+
+                  <Link onClick={handleLogout}>
+                    <Button sx={{ color: '#fff' }}>
+                      Logout
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+
+                <Link to="/login">
+                  <Button sx={{ color: '#fff' }}>
+                    Login
+                  </Button>
+                </Link>
+              )
+            }
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -64,15 +100,38 @@ function FrontHome(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Bd Job Hunt
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+            <Link to="/">
+              <Button sx={{ color: '#fff' }}>
+                Home
               </Button>
-            ))}
+            </Link>
           </Box>
+          {
+            user ? (
+              <>
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <Link to="/allJobs">
+                    <Button sx={{ color: '#fff' }}>
+                      All Jobs
+                    </Button>
+                  </Link>
+
+                </Box>
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <Link onClick={handleLogout}>
+                    <Button sx={{ color: '#fff' }}>
+                      Logout
+                    </Button>
+                  </Link>
+
+                </Box></>
+            ) : (
+              <></>
+            )
+          }
         </Toolbar>
       </AppBar>
       <nav>
@@ -97,4 +156,4 @@ function FrontHome(props) {
 }
 
 
-export default FrontHome;
+export default Header;

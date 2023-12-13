@@ -4,9 +4,10 @@ import { useState } from "react";
 import { AuthContext } from '../../../../dashboard/authProvider/AuthProvider';
 import { FaUserCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import DangerousIcon from '@mui/icons-material/Dangerous';
 const AllJobSearch = ({ data }) => {
     // from job distructer
-    const { jobLocation, skill, roleName, _id } = data;
+    const { jobLocation, skill, roleName, _id, companyName } = data;
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
@@ -15,50 +16,51 @@ const AllJobSearch = ({ data }) => {
     const [skilll, setSkilll] = useState([])
     const [userSkill, setUserSkill] = useState([])
     const [isMatch, setMatch] = useState('');
-    const [isMatchLoading, setMathLoading] = useState(true)
+    const [isMatchLoading, setMatchLoading] = useState(true)
     const { email } = mappedUser;
     const { emails, skills } = filt;
     useEffect(() => {
         axiosSecure.get('/users')
             .then(res => {
                 setLoggedInUser(res.data);
-                setMathLoading(false)
+                setMatchLoading(false);
 
             });
 
     }, [axiosSecure]);
 
     useEffect(() => {
-        //const userEmail = loggedInUser.length > 0 ? loggedInUser[0].email : null;
         loggedInUser?.map(user => setMappedUser(user))
     }, [loggedInUser])
 
     useEffect(() => {
-        loggedInUser?.map(user => user)
-        const em = loggedInUser?.filter((use) => use.emails === user?.email)
-        const updatedFilterUser = em?.[0] || {};
-        setFilt(updatedFilterUser);
+        if (loggedInUser) {
+            setMappedUser(loggedInUser.length > 0 ? loggedInUser[0] : {});
 
-    }, [skills, skill, skilll, loggedInUser])
+            setSkilll(skill?.map((sk) => sk.label) || []);
+
+            setUserSkill(skills?.map((sks) => sks.label) || []);
+
+            const em = loggedInUser.filter((use) => use.emails === user?.email);
+            const updatedFilterUser = em[0] || {};
+            setFilt(updatedFilterUser);
+        }
+    }, [loggedInUser, skill, skills, user?.email]);
+
 
     useEffect(() => {
 
 
-        // job requirement
-        setSkilll(
-            skill?.map((sk) => sk.label)
-        )
-        // user skills
-        setUserSkill(
-            skills?.map((sks) => (sks.label))
-        )
 
-        const jobSki = skilll
-        const userSki = userSkill
-        const matching = jobSki?.filter((skillls) => userSki?.includes(skillls));
-        setMatch(matching)
-        setMathLoading(false)
-    }, [skill, skills, userSkill])
+        if (user?.email) {
+            const jobSki = skilll
+            const userSki = userSkill
+            const matching = jobSki?.filter((skillls) => userSki?.includes(skillls));
+            setMatch(matching)
+        }
+
+
+    }, [skill, skills, userSkill, skilll, user?.email])
 
     //console.log(isMatch)
     return (
@@ -66,28 +68,36 @@ const AllJobSearch = ({ data }) => {
             <h2 className="text-3xl">{roleName}</h2>
 
             {
-                isMatchLoading ? (
-                    <>Loading</>
-                ) : (
-                    isMatch?.length <= 0 ? (
-                        null
-
+                isMatch?.length <= 0 ? (
+                    <div role="alert" className="bg-red-100 gap-3 rounded-md flex p-0 w-[30%] mb-3 mt-3">
+                        <DangerousIcon className="text-red-500"/>
+                        <span className="text-[13px]">Your profile doesn't match this job</span>
+                    </div>) : (
+                    isMatchLoading ? (
+                        <>Loading...</>
                     ) : (
                         <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 w-[26%] mb-3 mt-3">
                             <FaUserCheck />
-                            <span>Your profile match this job</span>
+                            <span className="text-[13px]">Your profile match this job</span>
                         </div>
                     )
-
                 )
+
+
             }
 
-            <p>Google</p>
+            <p>{companyName}</p>
             <p>{jobLocation}</p>
             <div className="mt-4">
-                <Link to={`/detail/${_id}`}>
-                    <button className="btn btn-sm btn-outline btn-primary">Learn More</button>
-                </Link>
+                {
+                    isMatch?.length <= 0 ? (
+                        <button disabled className="btn btn-sm btn-outline btn-primary">Learn More</button>
+                    ) : (
+                        <Link to={`/detail/${_id}`}>
+                            <button className="btn btn-sm btn-outline btn-primary">Learn More</button>
+                        </Link>
+                    )
+                }
             </div>
         </div>
     );

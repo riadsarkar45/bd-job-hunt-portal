@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import toast from 'react-hot-toast';
 import { MultiSelect } from "react-multi-select-component";
+import Swal from 'sweetalert2';
 const AddNewJob = () => {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(null);
@@ -22,14 +23,19 @@ const AddNewJob = () => {
         const salary = form.salary.value;
         const experience = form.experience.value;
         const jobLocation = form.jobLocation.value;
+        const companyName = form.companyName.value;
         const skill = selected?.map(slc => slc)
-        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, content, skill: skill }
+        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, content, skill: skill, companyName }
 
         axiosSecure.post('/newJob', dataToInsert)
             .then(data => {
                 setLoading(false)
                 toast.success("Job Posted Successfully")
                 console.log(data.data)
+                Swal.fire({
+                    title: "Job Posted",
+                    icon: "success"
+                  });
             })
     }
     const options = [
@@ -61,6 +67,7 @@ const AddNewJob = () => {
                     </FormControl>
                     <TextField id="outlined-basic" name="salary" label="Salary" variant="outlined" />
                     <TextField name="experience" id="outlined-basic" label="Experience" variant="outlined" />
+                    <TextField name="companyName" id="outlined-basic" label="Company Name" variant="outlined" />
                     
                     <FormControl>
                         <InputLabel htmlFor="jobType">Select Job Type</InputLabel>
@@ -105,7 +112,6 @@ const AddNewJob = () => {
                     }
                 </div>
             </form>
-            {content}
         </Box>
     );
 };

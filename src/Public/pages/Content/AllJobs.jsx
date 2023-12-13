@@ -10,18 +10,16 @@ import ListItem from '@mui/material/ListItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, FormControl, FormHelperText, InputLabel, LinearProgress, MenuItem, Select, TextField } from '@mui/material';
+import { FormControl, LinearProgress, MenuItem, Select } from '@mui/material';
 import { useState } from 'react';
 import useAxiosPublic from '../../../components/Hooks/useAxiosPublic';
 import AllJobSearch from './AllJobSearch/AllJobSearch';
 import { useEffect } from 'react';
-import useAxiosSecure from '../../../components/Hooks/useAxiosSecure';
 
 const drawerWidth = 380;
 
 function AllJobs(props) {
     const axiosPublic = useAxiosPublic();
-    const axiosSecure = useAxiosSecure();
     const [jobs, setJobs] = useState([])
     const [loading, setLoading] = useState(true)
     const { window } = props;
@@ -30,9 +28,6 @@ function AllJobs(props) {
     const [filtJobs, setFiltJobs] = useState([]);
     const [filtLoading, setFiltLoading] = useState(true)
     const [datas, setData] = useState(false)
-    const [inputLocation, setInputLocation] = useState('')
-    const [matchSkill, setMatchSkill] = useState([]);
-    const [nonos, setNono] = useState('')
     const handleChange = (event) => {
       setDegree(event.target.value);
       setData(true)
@@ -45,7 +40,7 @@ function AllJobs(props) {
       const filterJobs = jobs?.filter(job => job.degree === degree);
       setFiltLoading(false)
       setFiltJobs(filterJobs)
-    }, [degree, jobs, inputLocation]);
+    }, [degree, jobs]);
 
   useEffect(() => {
     axiosPublic.get('/jobs')
@@ -53,28 +48,9 @@ function AllJobs(props) {
           setJobs(res.data)
           setLoading(false)
     })
-  }, [])
-    useEffect(() => {
-      axiosSecure.get('/users')
-          .then(res => {
-              setMatchSkill(res.data);
-          })
-          .catch(error => {
-              console.error("Error fetching users:", error);
-          });
-  }, [axiosSecure, matchSkill]);
+  }, [axiosPublic])
 
-  useEffect(() => {
-    const nono = matchSkill?.map(s => s)
-    setNono(nono)
-  }, [matchSkill])
 
-    const handleInputLocation = (event) => {
-      const newValue = event.target.value;
-      console.log('Input value:', newValue);
-      const charString = Array.from(newValue).join('');
-      setInputLocation(charString);
-    };
   const drawer = (
     <div>
       <Toolbar />
@@ -145,7 +121,7 @@ function AllJobs(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            All Jobs
           </Typography>
         </Toolbar>
       </AppBar>
@@ -199,9 +175,9 @@ function AllJobs(props) {
                     <div className='mt-10'><LinearProgress /></div>
                   ) : (
                     datas ? (
-                      filtJobs.map(data => <AllJobSearch key={data._id} data={data} nonos={nonos} />)
+                      filtJobs.map(data => <AllJobSearch key={data._id} data={data} />)
                     ) : (
-                      jobs.map(data => <AllJobSearch key={data._id} data={data} nonos={nonos}  />)
+                      jobs.map(data => <AllJobSearch key={data._id} data={data} />)
                     )
                   )
                 }

@@ -1,22 +1,127 @@
-import GoogleIcon from '@mui/icons-material/Google';
-import { useContext } from 'react';
-import { AuthContext } from '../../dashboard/authProvider/AuthProvider';
-const Login = () => {
-    const {googleSignIn} = useContext(AuthContext);
-    const handleGoogleLogin = () => {
-        googleSignIn()
-        .then(res => {
-            console.log(res.user)
-        })
-    }
-    return (
-        <div className='text-center mt-[20%]'>
-            <button onClick={handleGoogleLogin} className="btn">
-                <GoogleIcon></GoogleIcon>
-                Continue With Google
-            </button>
-        </div>
-    );
-};
 
-export default Login;
+
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
+import { FaGoogle } from "react-icons/fa";
+import { useContext } from "react";
+import toast from "react-hot-toast";
+
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../Firbase';
+import { AuthContext } from '../../dashboard/authProvider/AuthProvider';
+import useAxiosPublic from '../../components/Hooks/useAxiosPublic';
+
+const SignIn = () => {
+    const { googleSignIn } = useContext(AuthContext)
+    const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        console.log(email, password);
+        signInWithEmailAndPassword(auth, email, password)
+            .then(result => {
+                console.log(result.user)
+
+
+            })
+            .catch(error => {
+                toast.error(error.message)
+            })
+    };
+
+    const handleGoogleSignIn = () => {
+        googleSignIn()
+            .then(res => {
+                console.log(res.user.photoURL)
+                const role = "donor";
+                const status = "Active";
+                const all = { name: res.user.displayName, email: res.user.email, image: res.user.photoURL, role, status }
+                axiosPublic.post('/users', all)
+                    .then(res => {
+                        console.log(res.data)
+                        navigate("/")
+                    })
+            })
+            .catch(error => console.error(error))
+    }
+
+    const defaultTheme = createTheme();
+
+
+    return (
+        <ThemeProvider theme={defaultTheme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                        />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+                    </Box>
+                    <Button onClick={handleGoogleSignIn}
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        <FaGoogle></FaGoogle> <span className="ml-3">Continue with Google</span>
+
+                    </Button>
+                </Box>
+            </Container>
+
+        </ThemeProvider>
+    );
+}
+
+export default SignIn;

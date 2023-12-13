@@ -15,32 +15,41 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
-import { useContext } from "react";
-import { AuthContext } from './authProvider/AuthProvider';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { TextField } from '@mui/material';
-import { Toaster } from 'react-hot-toast';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useAdmin from '../components/Hooks/useAdmin';
+import { useContext } from 'react';
+import { AuthContext } from './authProvider/AuthProvider';
+import useHiring from "../components/Hooks/useHiring";
 const drawerWidth = 240;
 
 function Sidebar(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
-
+    const [isAdmin] = useAdmin();
+    const [isHiring] = useHiring();
+    console.log(isHiring)
+    const navigate = useNavigate();
+    const { user, logOut } = useContext(AuthContext)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-    const authInfo = useContext(AuthContext);
-    console.log(authInfo)
+
+    const handleLogout = () => {
+        logOut()
+            .then(() => {
+                navigate("/login")
+            })
+            .catch(error => console.error(error))
+    }
     const drawer = (
 
         <div>
-            <div className='mt-2 mb-7 p-3'>
-                <TextField className='mt-10' name="search" id="outlined-basic" label="Search" variant="outlined" />
-            </div>
 
             <Divider className='mb-10' />
             <List>
@@ -49,48 +58,85 @@ function Sidebar(props) {
                         <ListItemIcon>
                             <HomeIcon />
                         </ListItemIcon>
-                        <Link to="/">Home</Link>
+                        <Link to="/dashboard">Home</Link>
                     </ListItemButton>
                 </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <WorkHistoryIcon />
-                        </ListItemIcon>
-                        <Link to="/recruiter">Recruiters</Link>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <SupportAgentIcon />
-                        </ListItemIcon>
-                        <Link to="/all-jobs">All Jobs</Link>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <SupportAgentIcon />
-                        </ListItemIcon>
-                        <Link to="/post-a-job">Post A Job</Link>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <PeopleAltIcon></PeopleAltIcon>
-                        </ListItemIcon>
-                        <Link to="/all-user">All Users</Link>
-                    </ListItemButton>
-                </ListItem>
+
+                {
+                    isAdmin ? (
+                        <>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <SupportAgentIcon />
+                                    </ListItemIcon>
+                                    <Link to="/all-jobs">All Jobs</Link>
+                                </ListItemButton>
+                            </ListItem>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <PeopleAltIcon></PeopleAltIcon>
+                                    </ListItemIcon>
+                                    <Link to="/dashboard/all-users">All Users</Link>
+                                </ListItemButton>
+                            </ListItem>
+                        </>
+                    ) : (
+                        null
+                    )
+                }
+
+                {
+                    isHiring ? (
+
+                        <>
+
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <SupportAgentIcon />
+                                    </ListItemIcon>
+                                    <Link to="/dashboard/addNewJob">Post a job</Link>
+                                </ListItemButton>
+                            </ListItem>
+
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <SupportAgentIcon />
+                                    </ListItemIcon>
+                                    <Link to={`/dashboard/job-posts/${user?.email}`}>My job posts</Link>
+                                </ListItemButton>
+                            </ListItem>
+
+
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <InboxIcon />
+                                    </ListItemIcon>
+                                    <Link to={`/dashboard/application/${user?.email}`}>
+                                        <ListItemText>Applicant's</ListItemText>
+                                    </Link>
+                                </ListItemButton>
+                            </ListItem>
+
+                        </>
+                    ) : (
+                        null
+                    )
+                }
+
+
+
                 <ListItem disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
-                        <Link to="/application">
-                            <ListItemText>Applications</ListItemText>
+                        <Link to={`/dashboard/my-application/${user?.email}`}>
+                            <ListItemText>My Applications</ListItemText>
                         </Link>
                     </ListItemButton>
                 </ListItem>
@@ -100,7 +146,7 @@ function Sidebar(props) {
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
-                        <Link to="/myProfile">
+                        <Link to={`/dashboard/my-profile/${user?.email}`}>
                             <ListItemText>My Profile</ListItemText>
                         </Link>
                     </ListItemButton>
@@ -114,7 +160,7 @@ function Sidebar(props) {
                     <ListItemButton>
                         <ListItemIcon />
                         <LogoutIcon></LogoutIcon>
-                        <Link to="/">LouOut</Link>
+                        <Link onClick={handleLogout}>LogOut</Link>
                     </ListItemButton>
                 </ListItem>
             </List>
@@ -188,7 +234,7 @@ function Sidebar(props) {
             >
                 <Toolbar />
                 <Outlet></Outlet>
-                <Toaster />
+                <ToastContainer />
             </Box>
         </Box>
     );

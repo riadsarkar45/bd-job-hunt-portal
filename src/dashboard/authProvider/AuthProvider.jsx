@@ -1,13 +1,14 @@
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../../Firbase";
-
+import useAxiosPublic from "../../components/Hooks/useAxiosPublic";
 export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
+    const axiousPublic = useAxiosPublic();
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-    const provider = new GoogleAuthProvider ()
-    const googleSignIn = () =>{
+    const provider = new GoogleAuthProvider()
+    const googleSignIn = () => {
         setLoading(true)
         return signInWithPopup(auth, provider);
     }
@@ -16,10 +17,35 @@ const AuthProvider = ({ children }) => {
         return signOut(auth)
     }
 
+    const creatUser = (email, password) => {
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
+
+    const updateUserInfo = (name, imgUrl) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: imgUrl
+        })
+    }
     useEffect(() => {
         const unsubsCribe = onAuthStateChanged(auth, (currentUser) => {
             console.log(currentUser)
-            setLoading(false)
+            if (currentUser) {
+                const userInfo = { email: currentUser.email };
+                axiousPublic.post('/jwt', userInfo)
+                    .then(res => {
+                        if (res.data.token) {
+                            localStorage.setItem('access-token', res.data.token);
+                            setLoading(false)
+
+                        }
+                    })
+            } else {
+                localStorage.removeItem('access-token')
+                setLoading(false)
+
+            }
+
             setUser(currentUser)
 
         })
@@ -27,8 +53,8 @@ const AuthProvider = ({ children }) => {
             return unsubsCribe();
         }
 
-    }, [])
-    const authInfo = { user, googleSignIn, logOut, loading }
+    }, [axiousPublic])
+    const authInfo = { user, googleSignIn, logOut, loading, updateUserInfo, creatUser }
     return (
         <AuthContext.Provider value={authInfo}>
             {children}

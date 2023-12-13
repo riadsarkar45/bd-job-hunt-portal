@@ -6,45 +6,85 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
+import { useLoaderData } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
+import AllUserRow from './AllUserRow';
+import Swal from 'sweetalert2';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function AllUser() {
+  const axiosSecure = useAxiosSecure();
+  const { data: users = [], refetch } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users`);
+      return res.data;
+    }
+  });
+  // handleChangeRole, handleDelete
+
+  const handleChangeRole = (_id, role) => {
+    axiosSecure.patch(`/user-status/${_id}`, { role })
+      .then(res => {
+        Swal.fire({
+          title: "User role changed!",
+          text: "User is now admin!",
+          icon: "success"
+        });
+        refetch();
+        console.log(res.data)
+      })
+  }
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/user/${_id}`)
+          .then(res => {
+            Swal.fire({
+              title: "User role changed!",
+              text: "User is now admin!",
+              icon: "success"
+            });
+
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+            refetch();
+            console.log(res.data)
+          })
+      }
+    });
+
+  }
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Photo</TableCell>
-            <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell align="left">FullName</TableCell>
+            <TableCell align="left">Experience&nbsp;(g)</TableCell>
+            <TableCell align="left">Role&nbsp;(g)</TableCell>
+            <TableCell align="left">Action&nbsp;(g)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right"><Button variant="contained">Contained</Button></TableCell>
-            </TableRow>
-          ))}
+
+          {
+            users?.map(user => <AllUserRow handleChangeRole={handleChangeRole} handleDelete={handleDelete} key={user._id} user={user}></AllUserRow>)
+          }
+
         </TableBody>
       </Table>
     </TableContainer>
