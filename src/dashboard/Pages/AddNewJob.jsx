@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { MultiSelect } from "react-multi-select-component";
 import Swal from 'sweetalert2';
 import { AuthContext } from '../authProvider/AuthProvider';
+import { Helmet } from 'react-helmet-async';
 const AddNewJob = () => {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(null);
@@ -50,6 +51,10 @@ const AddNewJob = () => {
     return (
         <Box
         >
+            
+            <Helmet>
+                <title>Add new job</title>
+            </Helmet>
             <form onSubmit={handledAddNewJob}>
                 <div className='grid lg:grid-cols-2 md:grid-cols-2 w-full gap-3'>
                     <TextField name='roleName' id="outlined-basic" label="Role" variant="outlined" />

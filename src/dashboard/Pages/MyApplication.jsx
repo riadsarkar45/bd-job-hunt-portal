@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { Box, Modal, Typography } from '@mui/material';
 import MyApplicationRow from './MyApplicationRow';
+import { Helmet } from 'react-helmet-async';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -81,10 +82,15 @@ export default function MyApplication() {
 
     return (
         <TableContainer className='mt-10' component={Paper}>
+
+            <Helmet>
+                <title>Applicants</title>
+            </Helmet>
+
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>Name (100g serving)</TableCell>
+                        <TableCell>Name (100g servdghing)</TableCell>
                         <TableCell align="left">Email</TableCell>
                         <TableCell align="left">Experience&nbsp;(g)</TableCell>
                         <TableCell align="left">Status&nbsp;(g)</TableCell>

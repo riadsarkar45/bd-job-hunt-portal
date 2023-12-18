@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import EmAppTableRow from './EmAppTableRow';
+import { Helmet } from 'react-helmet-async';
 const EmployeeApplication = () => {
     const { email } = useParams();
     const axiosSecure = useAxiosSecure();
@@ -21,6 +22,9 @@ const EmployeeApplication = () => {
     });
     return (
         <TableContainer component={Paper}>
+            <Helmet>
+                <title>My Applications</title>
+            </Helmet>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>

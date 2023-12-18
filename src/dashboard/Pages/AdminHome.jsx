@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import useAdmin from '../../components/Hooks/useAdmin';
+import { Helmet } from 'react-helmet-async';
 
 const AdminHome = () => {
     const axiosSecure = useAxiosSecure();
@@ -15,6 +16,10 @@ const AdminHome = () => {
     })
     return (
         <div className='w-full'>
+
+            <Helmet>
+                <title>Home</title>
+            </Helmet>
             {
                 isAdmin ? (
                     <div className="stats shadow w-full">

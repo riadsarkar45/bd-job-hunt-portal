@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import AllUserRow from './AllUserRow';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 
 
@@ -70,6 +71,10 @@ export default function AllUser() {
   }
   return (
     <TableContainer component={Paper}>
+
+      <Helmet>
+        <title>All Users</title>
+      </Helmet>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,11 +5,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import JobRow from './JobRow';
 import Swal from 'sweetalert2'
+import { Helmet } from 'react-helmet-async';
 
 
 export default function EmployerJobs() {
@@ -67,6 +67,10 @@ export default function EmployerJobs() {
     }
     return (
         <TableContainer component={Paper}>
+
+            <Helmet>
+                <title>All Jobs</title>
+            </Helmet>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>

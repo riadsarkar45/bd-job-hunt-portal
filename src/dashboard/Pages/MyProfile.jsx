@@ -6,6 +6,7 @@ import { useLoaderData, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { Box, Modal, Typography } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -96,6 +97,10 @@ const MyProfile = () => {
     ];
     return (
         <div className='font-sans'>
+            
+            <Helmet>
+                <title>My Profile</title>
+            </Helmet>
             <div className='bg-red-100 p-3 rounded-md mb-4'>
                 <h2 className='text-2xl'>Resume</h2>
                 {

@@ -18,6 +18,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../Firbase';
 import { AuthContext } from '../../dashboard/authProvider/AuthProvider';
 import useAxiosPublic from '../../components/Hooks/useAxiosPublic';
+import { Helmet } from 'react-helmet-async';
 
 const SignIn = () => {
     const { googleSignIn } = useContext(AuthContext)
@@ -62,6 +63,9 @@ const SignIn = () => {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+             <Helmet>
+                <title>BD Hunt || Login</title>
+            </Helmet>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

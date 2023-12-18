@@ -7,6 +7,7 @@ import { useState } from 'react';
 import JobCard from '../JobCard';
 import SearchResult from './SearchResult';
 import SearchIcon from '@mui/icons-material/Search';
+import { Helmet } from 'react-helmet-async';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -52,6 +53,9 @@ function Content() {
     };
     return (
         <div className='font-sans mt-[10rem] w-[85%] m-auto'>
+            <Helmet>
+                <title>BD Hunt || Find your next job here</title>
+            </Helmet>
             <div className='lg:flex md:flex justify-between'>
                 <div>
                     <h2 className='text-5xl'>

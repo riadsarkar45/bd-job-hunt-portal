@@ -1,4 +1,5 @@
 import { TableCell, TableRow } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 
 const MyApplicationRow = ({ apply, seeResume, handleApplicationStatus, handleDeleteApplication, }) => {
     const { email, experience, roleName, status, _id } = apply;

@@ -64,19 +64,19 @@ const AllJobSearch = ({ data }) => {
 
     //console.log(isMatch)
     return (
-        <div className="bg-blue-500 bg-opacity-10 rounded-lg shadow-md mt-4 p-5 font-sans">
+        <div className="rounded-lg p-5 font-sans">
             <h2 className="text-3xl">{roleName}</h2>
 
             {
                 isMatch?.length <= 0 ? (
-                    <div role="alert" className="bg-red-100 gap-3 rounded-md flex p-0 lg:w-[33%] md:w-[33%] mb-3 mt-3">
+                    <div role="alert" className="bg-red-100 gap-3 rounded-md flex p-0 lg:w-[36%] md:w-[33%] mb-3 mt-3">
                         <DangerousIcon className="text-red-500" />
                         <span className="text-[13px] font-sans">Your profile doesn't match this job</span>
                     </div>) : (
                     isMatchLoading ? (
                         <>Loading...</>
                     ) : (
-                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 lg:w-[26%] md:w-[26%] mb-3 mt-3">
+                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 lg:w-[28%] md:w-[26%] mb-3 mt-3">
                             <FaUserCheck />
                             <span className="text-[13px] font-sans">Your profile match this job</span>
                         </div>

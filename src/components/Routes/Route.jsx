@@ -37,12 +37,12 @@ const Route = createBrowserRouter([
             {
                 path: "/signup",
                 element: <SignUp></SignUp>
-            }
+            },
+            {
+                path: "/alljobs",
+                element: <PrivateRoute><AllJobs></AllJobs></PrivateRoute>
+            },
         ]
-    },
-    {
-        path: "alljobs",
-        element: <PrivateRoute><AllJobs></AllJobs></PrivateRoute>
     },
     {
         path: "dashboard",
