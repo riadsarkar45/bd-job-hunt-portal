@@ -6,6 +6,7 @@ import useAxiosPublic from '../../../components/Hooks/useAxiosPublic'
 import { useState } from 'react';
 import JobCard from '../JobCard';
 import SearchResult from './SearchResult';
+import SearchIcon from '@mui/icons-material/Search';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -50,8 +51,8 @@ function Content() {
         setOpen(false);
     };
     return (
-        <div className='mt-[10rem] w-[85%] m-auto'>
-            <div className='flex justify-between'>
+        <div className='font-sans mt-[10rem] w-[85%] m-auto'>
+            <div className='lg:flex md:flex justify-between'>
                 <div>
                     <h2 className='text-5xl'>
                         <Typewriter
@@ -66,10 +67,10 @@ function Content() {
                         <Cursor />
                     </h2>
                     <h2 className='text-5xl'>For Everyone</h2>
-                    <p className='text-3xl mt-5'>Find you new job here</p>
+                    <p className='text-3xl mt-5'>Find your new tech job here</p>
 
                     <form onSubmit={handleSearch}>
-                        <div className='mt-10 mb-5 flex gap-5'>
+                        <div className='mt-10 mb-5 lg:flex md:flex gap-5'>
                             <div>
                                 <TextField
                                     name='role'
@@ -135,44 +136,9 @@ function Content() {
                 </Swiper>
             </div>
 
-            <div className='flex gap-10 mt-[5rem]'>
-                <div>
-                    <img className='rounded-md' src="https://i.ibb.co/tmcQ20D/teams-1x.jpg" alt="team" />
-                </div>
-                <div>
-                    <h2>TEAMS</h2>
-                    <h2>Find your team</h2>
-                    {/* <p>Together, we create access to information and build products for everyone. Want to be a Googler? Find your team.</p> */}
-                    <div className='grid grid-cols-2 mb-10 '>
-                        <div className='mt-6'>
-                            <h2 className='text-2xl text-blue-500'>
-                                Engineering and tech
-                            </h2>
-                            <p>Develop the products and tools of the future for billions of users.</p>
-                        </div>
-                        <div className='mt-6'>
-                            <h2 className='text-2xl text-blue-500'>
-                                Sals service and support
-                            </h2>
-                            <p>Develop the products and tools of the future for billions of users.</p>
-                        </div>
-                        <div className='mt-6'>
-                            <h2 className='text-2xl text-blue-500'>
-                                People
-                            </h2>
-                            <p>Develop the products and tools of the future for billions of users.</p>
-                        </div>
-                        <div className='mt-6'>
-                            <h2 className='text-2xl text-blue-500'>
-                                Consumer hardware
-                            </h2>
-                            <p>Develop the products and tools of the future for billions of users.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {/* modal here */}
+
 
             <Modal
                 open={open}
@@ -181,20 +147,33 @@ function Content() {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={{ ...style, width: '60%', height: "100%", overflowY: 'auto' }}>
-                    <h2 id="parent-modal-title">Search Result ({searchResult.length})</h2>
-                    <div className='w-full'>
-                        {
-                            searchLoading ? (
-                                <>
-                                    <LinearProgress />
-                                </>
+                    <h2 id="parent-modal-title">({searchResult.length})  jobs matched</h2>
+                    {
+                        searchResult.length <= 0 ?
+                            (
+                                <div className='text-center mt-[20rem]'>
+                                    <div className='bg-blue-500 rounded-lg bg-opacity-10 p-1 text-black w-[4rem] m-auto'>
+                                        <SearchIcon className='text-9xl' />
+                                    </div>
+                                    <h2 className='text-3xl mt-6'>No results</h2>
+                                </div>
                             ) : (
-                                searchResult?.map(search => <SearchResult key={search._id} search={search}></SearchResult>)
+                                <div className='w-full'>
+                                    {
+                                        searchLoading ? (
+                                            <>
+                                                <LinearProgress />
+                                            </>
+                                        ) : (
+                                            searchResult?.map(search => <SearchResult key={search._id} search={search}></SearchResult>)
+                                        )
+                                    }
+                                </div>
                             )
-                        }
-                    </div>
+                    }
                 </Box>
             </Modal>
+
 
         </div>
     );

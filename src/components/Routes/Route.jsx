@@ -58,7 +58,8 @@ const Route = createBrowserRouter([
             },
             {
                 path: '/dashboard/my-profile/:email',
-                element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>
+                element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>,
+                loader: ({params}) => fetch(`https://bd-job-server.vercel.app/usere/${params.email}`)
             },
             {
                 path: "/dashboard/application/:email",

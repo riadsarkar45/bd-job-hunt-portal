@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -56,7 +55,7 @@ function AllJobs(props) {
       <Toolbar />
       <Divider />
       <List>
-          <ListItem>
+          {/* <ListItem>
           <FormControl sx={{ m: 1, minWidth: 335 }}>
       <Select
         value={degree}
@@ -74,7 +73,7 @@ function AllJobs(props) {
       </Select>
     </FormControl>
             
-          </ListItem>
+          </ListItem> */}
           <ListItem>
            {/* <FormControl sx={{ m: 1, minWidth: 335 }}>
            <TextField
@@ -83,6 +82,9 @@ function AllJobs(props) {
             id="outlined-basic" label="Location" variant="outlined" />
 
             </FormControl> */}
+
+
+            More features will availlabel soon....
             
           </ListItem>
           <ListItem>

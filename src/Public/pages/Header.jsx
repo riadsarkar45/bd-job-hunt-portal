@@ -48,31 +48,32 @@ function Header(props) {
                 Home
               </Button>
             </Link>
-            {
-              user ? (
+            <Link onClick={handleLogout}>
+              <Button sx={{ color: '#fff' }}>
+                Logout
+              </Button>
+            </Link>
 
-                <>
-                  <Link onClick={handleLogout}>
-                    <Button sx={{ color: '#fff' }}>
-                      Logout
-                    </Button>
-                  </Link>
+            <Link onClick={handleLogout}>
+              <Button sx={{ color: '#fff' }}>
+                Logout
+              </Button>
+            </Link>
 
-                  <Link onClick={handleLogout}>
-                    <Button sx={{ color: '#fff' }}>
-                      Logout
-                    </Button>
-                  </Link>
-                </>
-              ) : (
 
-                <Link to="/login">
-                  <Button sx={{ color: '#fff' }}>
-                    Login
-                  </Button>
-                </Link>
-              )
-            }
+            <Link to="/login">
+              <Button sx={{ color: '#fff' }}>
+                Login
+              </Button>
+            </Link>
+
+
+
+            <Link to="alljobs">
+              <Button sx={{ color: '#fff' }}>
+                AllJob
+              </Button>
+            </Link>
           </ListItemButton>
         </ListItem>
       </List>
@@ -109,17 +110,28 @@ function Header(props) {
               </Button>
             </Link>
           </Box>
+
+
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            <Link to="/allJobs">
+              <Button sx={{ color: '#fff' }}>
+                All Jobs
+              </Button>
+            </Link>
+
+          </Box>
+
           {
             user ? (
               <>
-                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                  <Link to="/allJobs">
-                    <Button sx={{ color: '#fff' }}>
-                      All Jobs
-                    </Button>
-                  </Link>
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Link to="dashboard">
+                  <Button sx={{ color: '#fff' }}>
+                    Dashboard
+                  </Button>
+                </Link>
 
-                </Box>
+              </Box>
                 <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                   <Link onClick={handleLogout}>
                     <Button sx={{ color: '#fff' }}>
@@ -127,11 +139,24 @@ function Header(props) {
                     </Button>
                   </Link>
 
-                </Box></>
+                </Box>
+
+              </>
             ) : (
-              <></>
+              <>
+
+                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <Link to="/login" >
+                    <Button sx={{ color: '#fff' }}>
+                      Login
+                    </Button>
+                  </Link>
+
+                </Box>
+              </>
             )
           }
+
         </Toolbar>
       </AppBar>
       <nav>

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import DangerousIcon from '@mui/icons-material/Dangerous';
 const AllJobSearch = ({ data }) => {
     // from job distructer
-    const { jobLocation, skill, roleName, _id, companyName } = data;
+    const { jobLocation, skill, roleName, _id, companyName, status } = data;
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
@@ -64,21 +64,21 @@ const AllJobSearch = ({ data }) => {
 
     //console.log(isMatch)
     return (
-        <div className="bg-gray-50 rounded-lg shadow-md mt-4 p-5">
+        <div className="bg-blue-500 bg-opacity-10 rounded-lg shadow-md mt-4 p-5 font-sans">
             <h2 className="text-3xl">{roleName}</h2>
 
             {
                 isMatch?.length <= 0 ? (
-                    <div role="alert" className="bg-red-100 gap-3 rounded-md flex p-0 w-[30%] mb-3 mt-3">
-                        <DangerousIcon className="text-red-500"/>
-                        <span className="text-[13px]">Your profile doesn't match this job</span>
+                    <div role="alert" className="bg-red-100 gap-3 rounded-md flex p-0 lg:w-[33%] md:w-[33%] mb-3 mt-3">
+                        <DangerousIcon className="text-red-500" />
+                        <span className="text-[13px] font-sans">Your profile doesn't match this job</span>
                     </div>) : (
                     isMatchLoading ? (
                         <>Loading...</>
                     ) : (
-                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 w-[26%] mb-3 mt-3">
+                        <div role="alert" className="bg-green-100 gap-3 rounded-md flex p-0 lg:w-[26%] md:w-[26%] mb-3 mt-3">
                             <FaUserCheck />
-                            <span className="text-[13px]">Your profile match this job</span>
+                            <span className="text-[13px] font-sans">Your profile match this job</span>
                         </div>
                     )
                 )
@@ -86,15 +86,15 @@ const AllJobSearch = ({ data }) => {
 
             }
 
-            <p>{companyName}</p>
-            <p>{jobLocation}</p>
+            <p className="font-sans">{companyName}</p>
+            <p className="font-sans">{jobLocation}</p>
             <div className="mt-4">
                 {
                     isMatch?.length <= 0 ? (
-                        <button disabled className="btn btn-sm btn-outline btn-primary">Learn More</button>
+                        <button disabled className="btn btn-sm btn-outline btn-primary font-sans">Learn More</button>
                     ) : (
                         <Link to={`/detail/${_id}`}>
-                            <button className="btn btn-sm btn-outline btn-primary">Learn More</button>
+                            <button className="btn btn-sm btn-outline btn-primary font-sans">Learn More</button>
                         </Link>
                     )
                 }

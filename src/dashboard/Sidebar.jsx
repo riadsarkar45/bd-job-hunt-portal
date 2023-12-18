@@ -49,7 +49,7 @@ function Sidebar(props) {
     }
     const drawer = (
 
-        <div>
+        <div className='font-sans'>
 
             <Divider className='mb-10' />
             <List>
@@ -65,14 +65,6 @@ function Sidebar(props) {
                 {
                     isAdmin ? (
                         <>
-                            <ListItem disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <SupportAgentIcon />
-                                    </ListItemIcon>
-                                    <Link to="/all-jobs">All Jobs</Link>
-                                </ListItemButton>
-                            </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon>

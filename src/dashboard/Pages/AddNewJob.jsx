@@ -2,15 +2,17 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import JoditEditor from 'jodit-react';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import toast from 'react-hot-toast';
 import { MultiSelect } from "react-multi-select-component";
 import Swal from 'sweetalert2';
+import { AuthContext } from '../authProvider/AuthProvider';
 const AddNewJob = () => {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(null);
     const [selected, setSelected] = useState([]);
+    const {user} = useContext(AuthContext)
     const editor = useRef(null);
     const axiosSecure = useAxiosSecure();
     const handledAddNewJob = e => {
@@ -25,7 +27,7 @@ const AddNewJob = () => {
         const jobLocation = form.jobLocation.value;
         const companyName = form.companyName.value;
         const skill = selected?.map(slc => slc)
-        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, content, skill: skill, companyName }
+        const dataToInsert = { roleName, vacancys, type, salary, experience, jobLocation, content, skill: skill, companyName, email: user?.email }
 
         axiosSecure.post('/newJob', dataToInsert)
             .then(data => {

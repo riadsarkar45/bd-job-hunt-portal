@@ -27,13 +27,13 @@ const AdminHome = () => {
 
                         <div className="stat place-items-center">
                             <div className="stat-title">Total Jobs</div>
-                            <div className="stat-value text-secondary">{stats.totalJobs}</div>
+                            <div className="stat-value text-secondary">{stats?.totalJobs}</div>
                             <div className="stat-desc text-secondary"></div>
                         </div>
 
                         <div className="stat place-items-center">
                             <div className="stat-title">Total Applicant's</div>
-                            <div className="stat-value">{stats.totalApplicant}</div>
+                            <div className="stat-value">{stats?.totalApplicant}</div>
                             <div className="stat-desc"></div>
                         </div>
 

@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "job-portal-99a10",
+    "bd-job-portal": "job-portal-99a10",
+    "job-portal": "job-portal-99a10"
+  },
+  "targets": {},
+  "etags": {}
+}
