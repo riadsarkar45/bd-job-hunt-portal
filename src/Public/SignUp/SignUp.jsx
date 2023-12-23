@@ -79,9 +79,6 @@ export default function SignUp() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Helmet>
-                <title>BD Hunt || SignUp</title>
-            </Helmet>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

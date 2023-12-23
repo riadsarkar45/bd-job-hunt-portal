@@ -5,9 +5,10 @@ import { AuthContext } from '../../../../dashboard/authProvider/AuthProvider';
 import { FaUserCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DangerousIcon from '@mui/icons-material/Dangerous';
+import PaymentIcon from '@mui/icons-material/Payment';
 const AllJobSearch = ({ data }) => {
     // from job distructer
-    const { jobLocation, skill, roleName, _id, companyName, status } = data;
+    const { jobLocation, skill, roleName, _id, companyName, status, salary } = data;
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
@@ -87,6 +88,7 @@ const AllJobSearch = ({ data }) => {
             }
 
             <p className="font-sans">{companyName}</p>
+            <p className="font-sans"><PaymentIcon/> {salary}</p>
             <p className="font-sans">{jobLocation}</p>
             <div className="mt-4">
                 {

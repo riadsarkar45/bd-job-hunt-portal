@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -40,11 +40,43 @@ function AllJobs() {
     } else {
       setSearch(false)
     }
-    console.log(filter)
   };
 
+  const handleChangeJobType = (e) => {
+    const value = e.target.value;
+    if (value.length >= 0) {
+      const filter = jobs?.filter((jo) => jo.type === value)
+      setSearchResult(filter)
+      setSearch(true)
+    } else {
+      setSearch(false)
+    }
+  }
+
+  const handleSearchLocation = (e) => {
+    const value = e.target.value;
+    if (value.length >= 0) {
+      const filter = jobs?.filter((jo) => jo.jobLocation?.toLowerCase().includes(value))
+      setSearchResult(filter)
+      setSearch(true)
+    } else {
+      setSearch(false)
+    }
+  }
+
+  const handleSalarySearch = (e) => {
+    const value = e.target.value;
+    if (value.length >= 0) {
+      const filter = jobs?.filter((jo) => jo.salary?.toLowerCase().includes(value))
+      setSearchResult(filter)
+      setSearch(true)
+    } else {
+      setSearch(false)
+    }
+  }
+
   return (
-    <div style={{ display: 'flex' }} className='w-[80%] m-auto font-sans'>
+    <div className='w-[80%] m-auto font-sans lg:flex md:flex flex'>
       <CssBaseline />
       <div className='mt-[6.9rem] h-full shadow-md' style={{ position: 'fixed', width: '15rem', zIndex: 1200 }}>
         <div className='text-center text-blue-200'>
@@ -61,22 +93,24 @@ function AllJobs() {
         </List>
         <List>
           <ListItem>
-            <input type="text" placeholder="Location" className="input input-bordered w-full max-w-xs" />
+            <input type="text" onChange={handleSearchLocation} placeholder="Location" className="input input-bordered w-full max-w-xs" />
           </ListItem>
         </List>
         <List>
           <ListItem>
-            <input type="text" placeholder="Salary" className="input input-bordered w-full max-w-xs" />
+            <input type="text" onChange={handleSalarySearch} placeholder="Salary" className="input input-bordered w-full max-w-xs" />
           </ListItem>
         </List>
         <List>
           <ListItem>
-            <select className="select select-bordered w-full max-w-xs">
+            <select onChange={handleChangeJobType} className="select select-bordered w-full max-w-xs">
               <option disabled selected>Select Job Type</option>
               <option>Work From Home</option>
               <option>On Office</option>
               <option>Part Time</option>
-            </select>          </ListItem>
+              <option>Full Time</option>
+            </select>
+          </ListItem>
         </List>
       </div>
       <div style={{ marginLeft: '15rem', flexGrow: 1, marginTop: '64px', padding: '20px' }}>
@@ -103,7 +137,7 @@ function AllJobs() {
 
                 searchResult.length <= 0 ? (
                   <div className='text-center mt-[10rem] text-red-300 font-sans text-2xl'>
-                    <SearchIcon sx={{fontSize:"64px", color:"red"}} />
+                    <SearchIcon sx={{ fontSize: "64px", color: "red" }} />
                     <p>No result found</p>
                   </div>
                 ) : (
