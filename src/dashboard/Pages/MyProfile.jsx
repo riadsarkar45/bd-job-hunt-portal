@@ -104,7 +104,7 @@ const MyProfile = () => {
             <div className='bg-red-100 p-3 rounded-md mb-4'>
                 <h2 className='text-2xl'>Resume</h2>
                 {
-                    resume.length <= 0 ? (
+                    resume?.length <= 0 ? (
                         <div className='bg-blue-500 bg-opacity-10 text-center border border-sky-500 p-4 rounded-md w-[49%] m-auto'>
                             <p className='font-sans'>
                                 Set your resume here make sure your resume is updated

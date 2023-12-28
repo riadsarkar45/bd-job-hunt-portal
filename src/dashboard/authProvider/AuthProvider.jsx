@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "../../Firbase";
 import useAxiosPublic from "../../components/Hooks/useAxiosPublic";
@@ -16,6 +16,24 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signOut(auth)
     }
+
+    const signIn = (email, password) => {
+        setLoading(true);
+        console.log('Before sign-in:', email, password);
+        return signInWithEmailAndPassword(auth, email, password)
+            .then(result => {
+                console.log('Sign-in successful:', result.user);
+                return result; // This may not be necessary depending on your use case
+            })
+            .catch(error => {
+                console.error('Sign-in error:', error);
+                throw error; // Rethrow the error to propagate it to the calling code
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
 
     const creatUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password)
@@ -54,7 +72,7 @@ const AuthProvider = ({ children }) => {
         }
 
     }, [axiousPublic])
-    const authInfo = { user, googleSignIn, logOut, loading, updateUserInfo, creatUser }
+    const authInfo = { user, googleSignIn, logOut, signIn, loading, updateUserInfo, creatUser }
     return (
         <AuthContext.Provider value={authInfo}>
             {children}

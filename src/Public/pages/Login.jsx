@@ -14,14 +14,15 @@ import { FaGoogle } from "react-icons/fa";
 import { useContext } from "react";
 import toast from "react-hot-toast";
 
-import { signInWithEmailAndPassword } from 'firebase/auth';
+//import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../Firbase';
 import { AuthContext } from '../../dashboard/authProvider/AuthProvider';
 import useAxiosPublic from '../../components/Hooks/useAxiosPublic';
 import { Helmet } from 'react-helmet-async';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const SignIn = () => {
-    const { googleSignIn } = useContext(AuthContext)
+    const { googleSignIn, signIn } = useContext(AuthContext)
     const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
 
@@ -31,11 +32,9 @@ const SignIn = () => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         console.log(email, password);
-        signInWithEmailAndPassword(auth, email, password)
+        signIn(email, password)
             .then(result => {
                 console.log(result.user)
-
-
             })
             .catch(error => {
                 toast.error(error.message)
