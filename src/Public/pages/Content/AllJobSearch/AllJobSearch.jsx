@@ -12,14 +12,13 @@ const AllJobSearch = ({ data }) => {
     const axiosSecure = useAxiosSecure();
     const { user } = useContext(AuthContext)
     const [loggedInUser, setLoggedInUser] = useState([])
-    const [mappedUser, setMappedUser] = useState({})
+    const [,setMappedUser] = useState({})
     const [filt, setFilt] = useState({})
     const [skilll, setSkilll] = useState([])
     const [userSkill, setUserSkill] = useState([])
     const [isMatch, setMatch] = useState('');
     const [isMatchLoading, setMatchLoading] = useState(true)
-    const { email } = mappedUser;
-    const { emails, skills } = filt;
+    const { skills } = filt;
     useEffect(() => {
         axiosSecure.get('/users')
             .then(res => {
