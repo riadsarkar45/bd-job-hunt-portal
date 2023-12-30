@@ -10,16 +10,22 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import EmAppTableRow from './EmAppTableRow';
 import { Helmet } from 'react-helmet-async';
+import MyApplication from './MyApplication';
 const EmployeeApplication = () => {
     const { email } = useParams();
     const axiosSecure = useAxiosSecure();
-    const { data: my_application = [], refetch } = useQuery({
+    const { data: my_application = [], refetch, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get(`/my-application/${email}`);
+            console.log(res.data)
             return res.data;
         }
     });
+
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
     return (
         <TableContainer component={Paper}>
             <Helmet>
@@ -35,8 +41,19 @@ const EmployeeApplication = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {
+                    {/* {
                         my_application?.map(appli => <EmAppTableRow key={appli._id} appli={appli}></EmAppTableRow>)
+                    } */}
+                    {
+                        isLoading ? (
+                            <p>Loading...</p>
+                        ) : Array.isArray(my_application) ?(
+                            my_application?.map(appli => <EmAppTableRow key={appli?._id} appli={appli}></EmAppTableRow>)
+                        ) : (
+                    <TableRow>
+                        <TableCell colSpan={5}>No data available</TableCell>
+                    </TableRow>
+                    )
                     }
                 </TableBody>
             </Table>

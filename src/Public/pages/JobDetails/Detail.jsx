@@ -50,9 +50,12 @@ const Detail = () => {
 
         //console.log(filt)
     }, [userSkills, jobSkill])
-    console.log(isMatch)
-    console.log(isNotMatch)
-
+    console.log(isMatch.length)
+    console.log(isNotMatch.length)
+    const matchedSikill = parseInt(isMatch.length)
+    const notMatchedSkill = parseInt(isNotMatch.length)
+    const total = (matchedSikill / notMatchedSkill) * 100;
+    console.log(total)
     if (status === 'stop') {
         Swal.fire({
             icon: "error",

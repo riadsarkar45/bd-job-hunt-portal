@@ -31,14 +31,15 @@ export default function MyApplication() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const { email } = useParams();
-
     const { data: application = [], refetch, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get(`/application/${email}`);
+            console.log(res.data)
             return res.data;
         }
     });
+
     const handleApplicationStatus = (_id, status) => {
         axiosSecure.patch(`/application/${_id}`, { status })
             .then(res => {
@@ -46,6 +47,10 @@ export default function MyApplication() {
                 console.log(res.data)
             }
             )
+    }
+
+    if(isLoading){
+        return <p>kdkd</p>
     }
 
     const handleDeleteApplication = (_id) => {
@@ -98,9 +103,25 @@ export default function MyApplication() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {
-                        application?.map(apply => <MyApplicationRow key={apply._id} apply={apply} seeResume={seeResume} handleApplicationStatus={handleApplicationStatus} handleDeleteApplication={handleDeleteApplication}></MyApplicationRow>)
-                    }
+                {isLoading ? (
+                        <TableRow>
+                            <TableCell colSpan={5}>Loading...</TableCell>
+                        </TableRow>
+                    ) : Array.isArray(application) ? (
+                        application.map(apply => (
+                            <MyApplicationRow
+                                key={apply._id}
+                                apply={apply}
+                                seeResume={seeResume}
+                                handleApplicationStatus={handleApplicationStatus}
+                                handleDeleteApplication={handleDeleteApplication}
+                            />
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={5}>No data available</TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
 
