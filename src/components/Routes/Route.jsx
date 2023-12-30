@@ -30,7 +30,7 @@ const Route = createBrowserRouter([
                 element: <Login></Login>
             },
             {
-                path: "/detail/:id",
+                path: "/detail/:id/:email",
                 element: <PrivateRoute><Detail></Detail></PrivateRoute>,
                 loader: ({params}) => fetch(`https://bd-job-server.vercel.app/jobs/${params.id}`)
             },

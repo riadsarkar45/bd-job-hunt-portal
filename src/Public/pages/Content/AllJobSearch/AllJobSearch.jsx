@@ -94,7 +94,7 @@ const AllJobSearch = ({ data }) => {
                     isMatch?.length <= 0 ? (
                         <button disabled className="btn btn-sm btn-outline btn-primary font-sans">Learn More</button>
                     ) : (
-                        <Link to={`/detail/${_id}`}>
+                        <Link to={`/detail/${_id}/${user?.email}`}>
                             <button className="btn btn-sm btn-outline btn-primary font-sans">Learn More</button>
                         </Link>
                     )

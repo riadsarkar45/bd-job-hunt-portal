@@ -31,14 +31,14 @@ export default function MyApplication() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const { email } = useParams();
-    const { data: application = [], refetch } = useQuery({
+
+    const { data: application = [], refetch, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosSecure.get(`/application/${email}`);
             return res.data;
         }
     });
-
     const handleApplicationStatus = (_id, status) => {
         axiosSecure.patch(`/application/${_id}`, { status })
             .then(res => {

@@ -1,17 +1,57 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import DOMPurify from 'dompurify';
 import useAxiosPublic from '../../../components/Hooks/useAxiosPublic';
 import NewReleasesIcon from '@mui/icons-material/NewReleases'; import { AuthContext } from '../../../dashboard/authProvider/AuthProvider';
 import Swal from 'sweetalert2';
-import useAxiosSecure from '../../../components/Hooks/useAxiosSecure';
+import SideBarJob from './DetailPageSidebar/SideBarJob';
+import { useQuery } from '@tanstack/react-query';
 
 const Detail = () => {
+    const { id, email } = useParams();
     const data = useLoaderData();
     const axiosPublic = useAxiosPublic();
     const { user } = useContext(AuthContext)
     const [nonos,] = useState({})
+    const [sideJobs, setSideJobs] = useState([])
+    const [sideJobFilter, setSiteJobFilter] = useState([])
+    const [userSkills, setUserSkill] = useState([])
+    const [jobSkill, setJobSkill] = useState([])
+    const [isMatch, setIsMatch] = useState('')
+    const [isNotMatch, setIsNotMatch] = useState([])
     const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
+    const { data: userSkill = [], isLoading } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await axiosPublic.get(`/usere/${email}`);
+            return res.data;
+        }
+    });
+
+    const { skills } = userSkill;
+
+    useEffect(() => {
+        setUserSkill(
+            skills?.map(sk => sk.label)
+        )
+        setJobSkill(
+            skill?.map(jobSk => jobSk.label)
+        )
+    }, [skills, skill])
+    useEffect(() => {
+        const skill1 = userSkills
+        const skill2 = jobSkill;
+        const matchedSkill = skill1?.filter((sk) => skill2?.includes(sk))
+        const notMatchedSkill = skill2?.filter((sk) => !skill1?.includes(sk))
+        console.log(notMatchedSkill)
+        setIsNotMatch(notMatchedSkill)
+        setIsMatch(matchedSkill)
+
+
+        //console.log(filt)
+    }, [userSkills, jobSkill])
+    console.log(isMatch)
+    console.log(isNotMatch)
 
     if (status === 'stop') {
         Swal.fire({
@@ -22,7 +62,20 @@ const Detail = () => {
         });
     }
 
+    useEffect(() => {
+        axiosPublic.get('/jobs')
+            .then(res => {
+                setSideJobs(res.data)
+            });
+        window.scrollTo(0, 0);
 
+    }, [axiosPublic]);
+
+    useEffect(() => {
+        const filter = sideJobs?.filter((jobs) => jobs?._id !== id)
+        setSiteJobFilter(filter)
+
+    }, [sideJobs, id])
 
     const submitApllication = () => {
 
@@ -85,16 +138,47 @@ const Detail = () => {
                         <div>Skills:</div>
                         <div>
                             {
-                                skill?.map((sk, index) =>
-                                    <div key={index + 1} className="badge badge-outline">{sk.label}</div>
+                                isLoading ? (
+                                    <p>Loadding...</p>
+                                ) : (
+
+                                    skill?.map((sk, index) =>
+                                        <div key={index + 1} className="badge badge-outline">{sk.label} </div>
+
+                                    )
 
                                 )
                             }
                         </div>
+
                     </div>
+                    {
+                        isNotMatch.length <= 0 ? (
+                            null
+                        ) : (
+                            <div className='flex gap-2 mt-2'>
+                                <div>Your missing Skills:</div>
+                                <div>
+                                    {
+                                        isLoading ? (
+                                            <p>Loading...</p>
+                                        ) : (
+                                            isNotMatch?.map((sk, index) =>
+                                                <div key={index + 1} className="badge badge-outline">{sk}</div>
+                                            )
+                                        )
+                                    }
+                                </div>
+
+                            </div>
+                        )
+                    }
 
 
-                    <div>
+
+
+
+                    <div className='mt-8'>
                         {
                             status === 'stop' ? (
                                 <div className='text-center mt-8 bg-red-500 rounded-lg bg-opacity-30'>
@@ -122,9 +206,11 @@ const Detail = () => {
                     </div>
                 </dialog>
             </div>
-            <div className='bg-red-500 w-[30%]'>
-                <h2>Jobs you may like</h2>
-                
+            <div className='shadow-lg w-[30%]'>
+                <h2 className='text-2xl p-2'>Jobs you may like</h2>
+                {
+                    sideJobFilter?.map(jobs => <SideBarJob key={jobs._id} jobs={jobs}></SideBarJob>)
+                }
             </div>
         </div>
     );
