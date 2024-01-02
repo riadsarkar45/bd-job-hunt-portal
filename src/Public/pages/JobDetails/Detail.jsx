@@ -50,12 +50,8 @@ const Detail = () => {
 
         //console.log(filt)
     }, [userSkills, jobSkill])
-    console.log(isMatch.length)
-    console.log(isNotMatch.length)
-    const matchedSikill = parseInt(isMatch.length)
-    const notMatchedSkill = parseInt(isNotMatch.length)
-    const total = (matchedSikill / notMatchedSkill) * 100;
-    console.log(total)
+    
+
     if (status === 'stop') {
         Swal.fire({
             icon: "error",
@@ -160,7 +156,7 @@ const Detail = () => {
                             null
                         ) : (
                             <div className='flex gap-2 mt-2'>
-                                <div>Your missing Skills:</div>
+                                <div>Your missing skills:</div>
                                 <div>
                                     {
                                         isLoading ? (
@@ -176,8 +172,6 @@ const Detail = () => {
                             </div>
                         )
                     }
-
-
 
 
 
