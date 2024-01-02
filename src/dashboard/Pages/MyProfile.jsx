@@ -69,21 +69,30 @@ const MyProfile = () => {
         const skills = selected;
         const dataToInsert = { skills };
 
+        console.log('Updating user profile with data:', dataToInsert);
+
         axiosPublic.patch(`/users/${email}`, dataToInsert)
             .then(res => {
-                toast.success('Information Saved');
-                console.log(res.data);
-                Swal.fire({
-                    title: "Good job!",
-                    text: "Now you can match your job and apply!",
-                    icon: "success"
-                });
-                handleClose1();
+                if (res.data.message === '300') {
+                    Swal.fire({
+                        title: "Skill Exist!",
+                        icon: "error"
+                    });
+                    handleClose1();
+                } else {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Now you can match your job and apply!",
+                        icon: "success"
+                    });
+                    handleClose1();
+                }
             })
             .catch(error => {
-                console.error('Error updating user profile:', error);
+                console.error(error.message);
             });
     };
+
 
 
     // modal style
@@ -97,7 +106,7 @@ const MyProfile = () => {
     ];
     return (
         <div className='font-sans'>
-            
+
             <Helmet>
                 <title>My Profile</title>
             </Helmet>

@@ -6,6 +6,19 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases'; import { AuthCont
 import Swal from 'sweetalert2';
 import SideBarJob from './DetailPageSidebar/SideBarJob';
 import { useQuery } from '@tanstack/react-query';
+import { Box, Button, Modal, Typography } from '@mui/material';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 const Detail = () => {
     const { id, email } = useParams();
@@ -19,14 +32,27 @@ const Detail = () => {
     const [jobSkill, setJobSkill] = useState([])
     const [isMatch, setIsMatch] = useState('')
     const [isNotMatch, setIsNotMatch] = useState([])
+    const [open, setOpen] = useState(false);
     const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
-    const { data: userSkill = [], isLoading } = useQuery({
+    const { data: userSkill = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
             const res = await axiosPublic.get(`/usere/${email}`);
             return res.data;
         }
     });
+
+    const handleAddSkills = (skills) =>{
+        const skillObject = {
+            label: skills,
+            value: skills
+          };
+        axiosPublic.patch(`/users/${email}`, { skills: [skillObject] })
+        .then(res => {
+            refetch()
+            console.log(res.data)
+        })
+    }
 
     const { skills } = userSkill;
 
@@ -50,7 +76,7 @@ const Detail = () => {
 
         //console.log(filt)
     }, [userSkills, jobSkill])
-    
+
 
     if (status === 'stop') {
         Swal.fire({
@@ -96,6 +122,8 @@ const Detail = () => {
     }
 
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
 
     const sanitizedContent = DOMPurify.sanitize(content);
@@ -155,20 +183,25 @@ const Detail = () => {
                         isNotMatch.length <= 0 ? (
                             null
                         ) : (
-                            <div className='flex gap-2 mt-2'>
-                                <div>Your missing skills:</div>
-                                <div>
-                                    {
-                                        isLoading ? (
-                                            <p>Loading...</p>
-                                        ) : (
-                                            isNotMatch?.map((sk, index) =>
-                                                <div key={index + 1} className="badge badge-outline">{sk}</div>
+                            <div className='flex gap-2 mt-2 bg-blue-600 p-3 rounded-md text-white font-bold opacity-50 justify-between'>
+                                <div className='flex gap-3 items-center'>
+                                    Your missing skills:
+                                    <div>
+                                        {
+                                            isLoading ? (
+                                                <p>Loading...</p>
+                                            ) : (
+                                                isNotMatch?.map((sk, index) =>
+                                                    <div key={index + 1} className="badge badge-outline">{sk}</div>
+                                                )
                                             )
-                                        )
-                                    }
+                                        }
+                                    </div>
                                 </div>
 
+                                <div className='border border-black p-1 rounded-md text-white font-bold'>
+                                    <Button sx={{ color: "white", fontWeight: "bold" }} onClick={handleOpen}>Set Skill</Button>
+                                </div>
                             </div>
                         )
                     }
@@ -202,6 +235,42 @@ const Detail = () => {
                         <button onClick={submitApllication} className='btn btn-sm btn-success btn-outline mt-6'>Apply</button>
                     </div>
                 </dialog>
+
+
+                {/* material ui modal here */}
+
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Missing Skills
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                            <div className='block'>
+                                {
+                                    isLoading ? (
+                                        <p>Loading...</p>
+                                    ) : (
+                                        isNotMatch?.map((sk, index) =>
+                                            <div key={index + 1} className="border border-blue-500 border-opacity-20 p-4 rounded-md mt-2 flex justify-between items-center font-sans">
+                                                <div>
+                                                    {sk}
+                                                </div>
+                                                <div>
+                                                    <button onClick={() => handleAddSkills(sk)} className='btn btn-outline btn-sm hover:blue'>Add Skill</button>
+                                                </div>
+                                            </div>
+                                        )
+                                    )
+                                }
+                            </div>
+                        </Typography>
+                    </Box>
+                </Modal>
             </div>
             <div className='shadow-lg w-[30%]'>
                 <h2 className='text-2xl p-2'>Jobs you may like</h2>
