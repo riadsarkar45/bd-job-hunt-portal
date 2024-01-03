@@ -15,7 +15,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    borderRadius: '0.1rem',
     boxShadow: 24,
     p: 4,
 };
@@ -33,6 +33,7 @@ const Detail = () => {
     const [isMatch, setIsMatch] = useState('')
     const [isNotMatch, setIsNotMatch] = useState([])
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(null)
     const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
     const { data: userSkill = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
@@ -42,16 +43,18 @@ const Detail = () => {
         }
     });
 
-    const handleAddSkills = (skills) =>{
+    const handleAddSkills = (skills) => {
+        setLoading(true)
         const skillObject = {
             label: skills,
             value: skills
-          };
+        };
         axiosPublic.patch(`/users/${email}`, { skills: [skillObject] })
-        .then(res => {
-            refetch()
-            console.log(res.data)
-        })
+            .then(res => {
+                refetch()
+                console.log(res.data)
+                setLoading(false)
+            })
     }
 
     const { skills } = userSkill;
@@ -76,6 +79,8 @@ const Detail = () => {
 
         //console.log(filt)
     }, [userSkills, jobSkill])
+
+
 
 
     if (status === 'stop') {
@@ -103,7 +108,7 @@ const Detail = () => {
     }, [sideJobs, id])
 
     const submitApllication = () => {
-
+        handleClose();
         const { resume } = nonos
         console.log(resume)
         const status = 'pending'
@@ -116,6 +121,7 @@ const Detail = () => {
                     text: "You clicked the button!",
                     icon: "success"
                 });
+                handleOpen();
             })
 
 
@@ -170,7 +176,7 @@ const Detail = () => {
                                 ) : (
 
                                     skill?.map((sk, index) =>
-                                        <div key={index + 1} className="badge badge-outline">{sk.label} </div>
+                                        <div key={index + 1} className="badge badge-outline ml-1">{sk.label} </div>
 
                                     )
 
@@ -180,9 +186,7 @@ const Detail = () => {
 
                     </div>
                     {
-                        isNotMatch.length <= 0 ? (
-                            null
-                        ) : (
+                        isNotMatch?.length > isMatch?.length ? (
                             <div className='flex gap-2 mt-2 bg-blue-600 p-3 rounded-md text-white font-bold opacity-50 justify-between'>
                                 <div className='flex gap-3 items-center'>
                                     Your missing skills:
@@ -192,7 +196,7 @@ const Detail = () => {
                                                 <p>Loading...</p>
                                             ) : (
                                                 isNotMatch?.map((sk, index) =>
-                                                    <div key={index + 1} className="badge badge-outline">{sk}</div>
+                                                    <div key={index + 1} className="badge badge-outline ml-1">{sk}</div>
                                                 )
                                             )
                                         }
@@ -202,6 +206,41 @@ const Detail = () => {
                                 <div className='border border-black p-1 rounded-md text-white font-bold'>
                                     <Button sx={{ color: "white", fontWeight: "bold" }} onClick={handleOpen}>Set Skill</Button>
                                 </div>
+                            </div>
+                        ) : (
+
+                            <div>
+                                <div className='bg-green-600 p-3 rounded-md opacity-40 text-white font-bold mt-4'>
+                                    {skill?.length} / {isMatch?.length} Matches with your profile you may be a good fit
+                                </div>
+
+
+                                {
+                                    isNotMatch?.length <= 0 ? (
+                                        null
+                                    ) : (
+                                        <div className='flex gap-2 mt-2 bg-blue-600 p-3 rounded-md text-white font-bold opacity-50 justify-between'>
+                                            <div className='flex gap-3 items-center'>
+                                                Your missing skills:
+                                                <div>
+                                                    {
+                                                        isLoading ? (
+                                                            <p>Loading...</p>
+                                                        ) : (
+                                                            isNotMatch?.map((sk, index) =>
+                                                                <div key={index + 1} className="ml-1 badge badge-outline">{sk}</div>
+                                                            )
+                                                        )
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <div className='border border-black p-1 rounded-md text-white font-bold'>
+                                                <Button sx={{ color: "white", fontWeight: "bold" }} onClick={handleOpen}>Set Skill</Button>
+                                            </div>
+                                        </div>
+                                    )
+                                }
                             </div>
                         )
                     }
@@ -248,6 +287,17 @@ const Detail = () => {
                     <Box sx={style}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Missing Skills
+                        </Typography>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {
+                                loading ? (
+                                    <div className='font-serif bg-blue-500 opacity-40 text-white font-bold p-2 rounded-md'>
+                                        <p>Skill set updating...</p>
+                                    </div>
+                                ): (
+                                    null
+                                )
+                            }
                         </Typography>
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                             <div className='block'>
