@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import SideBarJob from './DetailPageSidebar/SideBarJob';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Button, Modal, Typography } from '@mui/material';
+import moment from 'moment';
 
 const style = {
     position: 'absolute',
@@ -35,6 +36,7 @@ const Detail = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(null)
     const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
+    
     const { data: userSkill = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -110,18 +112,24 @@ const Detail = () => {
     const submitApllication = () => {
         handleClose();
         const { resume } = nonos
-        console.log(resume)
         const status = 'pending'
-        const dataToInsert = { roleName, experience, skill, email: user?.email, status, resume }
+        const dataToInsert = { roleName, experience, skill, email: user?.email, status, resume, monthName:moments, applicationCount:1 }
         axiosPublic.post('/application', dataToInsert)
-            .then(res => {
-                console.log(res.data);
+            .then(() => {
                 Swal.fire({
                     title: "Good job!",
                     text: "You clicked the button!",
                     icon: "success"
                 });
-                handleOpen();
+                axiosPublic.post('/applicationMonth', dataToInsert)
+                .then(() => {
+                    Swal.fire({
+                        title: "HeadShot!",
+                        text: "You clicked the button!",
+                        icon: "success"
+                    });
+                })
+                handleClose();
             })
 
 
@@ -131,7 +139,7 @@ const Detail = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-
+    const moments = moment().format("MMM ");
     const sanitizedContent = DOMPurify.sanitize(content);
     return (
         <div className='flex mt-[8rem] w-[85%] m-auto gap-5 font-serif'>

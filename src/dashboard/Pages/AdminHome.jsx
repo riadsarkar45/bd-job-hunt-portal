@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import useAxiosSecure from '../../components/Hooks/useAxiosSecure';
 import useAdmin from '../../components/Hooks/useAdmin';
 import { Helmet } from 'react-helmet-async';
+import { XAxis, YAxis, ResponsiveContainer, BarChart, Bar, Tooltip } from 'recharts';
+
 
 const AdminHome = () => {
     const axiosSecure = useAxiosSecure();
+    
     const [isAdmin] = useAdmin();
     const { data: stats } = useQuery({
         queryKey: ['admin-stats'],
@@ -14,6 +16,18 @@ const AdminHome = () => {
             return res.data
         }
     })
+
+    
+
+    const { data: chartData = [] } = useQuery({
+        queryKey: ['chartData'],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/monthlyApplications`);
+            return res.data;
+        }
+    });
+    
+
     return (
         <div className='w-full'>
 
@@ -50,6 +64,19 @@ const AdminHome = () => {
                     </div>
                 )
             }
+
+            <div className='mt-9'>
+                <ResponsiveContainer height={250} width="100%">
+                    <BarChart data={chartData} width={400} height={400}>
+                        <XAxis dataKey="monthName" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="applicationCount" fill="#8883d8" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+
+
         </div>
     );
 };
