@@ -3,7 +3,7 @@ import { useLoaderData, useParams } from "react-router-dom";
 import DOMPurify from 'dompurify';
 import useAxiosPublic from '../../../components/Hooks/useAxiosPublic';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
- import { AuthContext } from '../../../dashboard/authProvider/AuthProvider';
+import { AuthContext } from '../../../dashboard/authProvider/AuthProvider';
 import Swal from 'sweetalert2';
 import SideBarJob from './DetailPageSidebar/SideBarJob';
 import { useQuery } from '@tanstack/react-query';
@@ -37,7 +37,7 @@ const Detail = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(null)
     const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
-    
+
     const { data: userSkill = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -114,7 +114,7 @@ const Detail = () => {
         handleClose();
         const { resume } = nonos
         const status = 'pending'
-        const dataToInsert = { roleName, experience, skill, email: user?.email, status, resume, monthName:moments, applicationCount:1 }
+        const dataToInsert = { roleName, experience, skill, email: user?.email, status, resume, monthName: moments, applicationCount: 1 }
         axiosPublic.post('/application', dataToInsert)
             .then(() => {
                 Swal.fire({
@@ -123,13 +123,13 @@ const Detail = () => {
                     icon: "success"
                 });
                 axiosPublic.post('/applicationMonth', dataToInsert)
-                .then(() => {
-                    Swal.fire({
-                        title: "HeadShot!",
-                        text: "You clicked the button!",
-                        icon: "success"
-                    });
-                })
+                    .then(() => {
+                        Swal.fire({
+                            title: "HeadShot!",
+                            text: "You clicked the button!",
+                            icon: "success"
+                        });
+                    })
                 handleClose();
             })
 
@@ -219,9 +219,15 @@ const Detail = () => {
                         ) : (
 
                             <div>
-                                <div className='bg-green-600 p-3 rounded-md opacity-40 text-white font-bold mt-4'>
-                                    {skill?.length} / {isMatch?.length} Matches with your profile you may be a good fit
-                                </div>
+                                {
+                                    isMatch?.length <= 0 ? (
+                                        null
+                                    ) : (
+                                        <div className='bg-green-600 p-3 rounded-md opacity-40 text-white font-bold mt-4'>
+                                            {skill?.length} / {isMatch?.length} Matches with your profile you may be a good fit
+                                        </div>
+                                    )
+                                }
 
 
                                 {
@@ -303,7 +309,7 @@ const Detail = () => {
                                     <div className='font-serif bg-blue-500 opacity-40 text-white font-bold p-2 rounded-md'>
                                         <p>Skill set updating...</p>
                                     </div>
-                                ): (
+                                ) : (
                                     null
                                 )
                             }

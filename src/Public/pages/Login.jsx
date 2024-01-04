@@ -47,7 +47,8 @@ const SignIn = () => {
                 console.log(res.user.photoURL)
                 const role = "donor";
                 const status = "Active";
-                const all = { name: res.user.displayName, email: res.user.email, image: res.user.photoURL, role, status }
+                const skills = []
+                const all = { name: res.user.displayName, email: res.user.email, image: res.user.photoURL, role, status, skills }
                 axiosPublic.post('/users', all)
                     .then(res => {
                         console.log(res.data)
