@@ -51,7 +51,7 @@ const AdminHome = () => {
                         </div>
 
                         <div className="stat place-items-center">
-                            <div className="stat-title">Total Applicant's</div>
+                            <div className="stat-title">Total Applicant{"'"}s</div>
                             <div className="stat-value">{stats?.totalApplicant}</div>
                             <div className="stat-desc"></div>
                         </div>
