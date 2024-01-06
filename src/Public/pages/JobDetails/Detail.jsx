@@ -124,11 +124,7 @@ const Detail = () => {
                 });
                 axiosPublic.post('/applicationMonth', dataToInsert)
                     .then(() => {
-                        Swal.fire({
-                            title: "HeadShot!",
-                            text: "You clicked the button!",
-                            icon: "success"
-                        });
+                        
                     })
                 handleClose();
             })

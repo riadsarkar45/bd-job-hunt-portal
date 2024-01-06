@@ -5,6 +5,7 @@ import 'swiper/css';
 import useAxiosPublic from '../../../components/Hooks/useAxiosPublic'
 import { useState } from 'react';
 import JobCard from '../JobCard';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 import SearchResult from './SearchResult';
 import SearchIcon from '@mui/icons-material/Search';
 import { Helmet } from 'react-helmet-async';
@@ -15,7 +16,6 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     pt: 2,
     px: 4,
@@ -73,35 +73,7 @@ function Content() {
                     <h2 className='text-5xl'>For Everyone</h2>
                     <p className='text-3xl mt-5'>Find your new tech job here</p>
 
-                    <form onSubmit={handleSearch}>
-                        <div className='mt-10 mb-5 lg:flex md:flex gap-5'>
-                            <div>
-                                <TextField
-                                    name='role'
-                                    id="outlined-basic"
-                                    label="Role"
-                                    placeholder='Software Engineer'
-                                    variant="outlined"
-                                    value={searchRole}
-                                    onChange={(e) => setSearchRole(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <TextField
-                                    name='location'
-                                    id="outlined-basic"
-                                    label="Location"
-                                    placeholder='Dhaka'
-                                    variant="outlined"
-                                    value={searchLocation}
-                                    onChange={(e) => setSearchLocation(e.target.value)}
-                                />
-                            </div>
-                            <div className='p-[11px]'>
-                                <Button type='submit' variant="contained">Search</Button>
-                            </div>
-                        </div>
-                    </form>
+                    
 
                 </div>
                 <div>
@@ -112,34 +84,37 @@ function Content() {
                     />
                 </div>
             </div>
+            <form onSubmit={handleSearch}>
 
-            <div className='mt-10 mb-10'>
-                <Swiper
-                    slidesPerView={4}
-                    centeredSlides={true}
-                    spaceBetween={30}
-                    grabCursor={true}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    className="mySwiper"
-                >
-                    {
-                        loading ? (
-                            <div className='mb-10'>
-                                <LinearProgress />
-                            </div>
-                        ) : (
-                            <div className='mb-10'>
-                                {
-                                    jobs?.map(job => <SwiperSlide key={job._id}><JobCard job={job}></JobCard></SwiperSlide>)
-                                }
-                            </div>
-                        )
-                    }
-                </Swiper>
-            </div>
+                <div className='shadow-md mt-10 mb-10 bg-blue-200 bg-opacity-25 p-3 rounded-md flex items-center w-full m-auto '>
+                    <div className='p-3'>
+                        <SearchIcon />
+                    </div>
+                    <div>
+                        <input
+                            value={searchRole}
+                            onChange={(e) => setSearchRole(e.target.value)}
+                            type="text" placeholder="Job Title"
+                            className="input  w-[27rem]" />
+                    </div>
+                    <div className='p-3'>
+                        <MyLocationIcon />
+                    </div>
+                    <div>
 
+                        <input
+                            value={searchLocation}
+                            onChange={(e) => setSearchLocation(e.target.value)}
+                            type="text"
+                            placeholder="Location"
+                            className="input  w-[27rem]" />
+                    </div>
+                    <div className='p-[11px]'>
+                        <Button type='submit' variant="contained">Search</Button>
+                    </div>
+                </div>
+
+            </form>
 
             {/* modal here */}
 

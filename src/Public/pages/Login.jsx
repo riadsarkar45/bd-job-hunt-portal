@@ -45,10 +45,10 @@ const SignIn = () => {
         googleSignIn()
             .then(res => {
                 console.log(res.user.photoURL)
-                const role = "donor";
+                const role = "employee";
                 const status = "Active";
                 const skills = []
-                const all = { name: res.user.displayName, email: res.user.email, image: res.user.photoURL, role, status, skills }
+                const all = { name: res.user.displayName, emails: res.user.email, image: res.user.photoURL, role, status, skills }
                 axiosPublic.post('/users', all)
                     .then(res => {
                         console.log(res.data)

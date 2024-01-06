@@ -83,9 +83,11 @@ function Header(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex',}}>
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar sx={{
+        backgroundColor: 'rgba(160, 160, 160, 0.5)',
+      }} component="nav">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -101,7 +103,10 @@ function Header(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            Bd Job Hunt
+            
+            <p className='font-mono'>SkillSync</p>
+              {/* <img className='w-[3%]' src="https://i.ibb.co/x2XcrnJ/DALL-E-2024-01-06-14-22-08-logo-skill-Sync.png" alt="" /> */}
+            
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Link to="/">
