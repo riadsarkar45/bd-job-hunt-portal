@@ -86,16 +86,17 @@ function Content() {
             </div>
             <form onSubmit={handleSearch}>
 
-                <div className='shadow-md mt-10 mb-10 bg-blue-200 bg-opacity-25 p-3 rounded-md flex items-center w-full m-auto '>
+                <div className='shadow-md mt-10 mb-10 bg-blue-200 bg-opacity-25 p-3 rounded-md lg:flex md:flex items-center w-full m-auto '>
                     <div className='p-3'>
                         <SearchIcon />
                     </div>
                     <div>
                         <input
                             value={searchRole}
+                            name='role'
                             onChange={(e) => setSearchRole(e.target.value)}
                             type="text" placeholder="Job Title"
-                            className="input  w-[27rem]" />
+                            className="input lg:w-[27rem] md:w-[27rem] w-full" />
                     </div>
                     <div className='p-3'>
                         <MyLocationIcon />
@@ -106,8 +107,9 @@ function Content() {
                             value={searchLocation}
                             onChange={(e) => setSearchLocation(e.target.value)}
                             type="text"
+                            name='location'
                             placeholder="Location"
-                            className="input  w-[27rem]" />
+                            className="input lg:w-[27rem] md:w-[27rem] w-full" />
                     </div>
                     <div className='p-[11px]'>
                         <Button type='submit' variant="contained">Search</Button>
