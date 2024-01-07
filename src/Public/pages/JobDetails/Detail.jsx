@@ -230,7 +230,7 @@ const Detail = () => {
                                     isNotMatch?.length <= 0 ? (
                                         null
                                     ) : (
-                                        <div className='flex gap-2 mt-2 bg-blue-600 p-3 rounded-md text-white font-bold opacity-50 justify-between'>
+                                        <div className='flex gap-2 mt-2 bg-blue-300 p-3 rounded-md text-white font-bold bg-opacity-20 justify-between'>
                                             <div className='flex gap-3 items-center'>
                                                 Your missing skills:
                                                 <div>
