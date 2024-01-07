@@ -7,7 +7,7 @@ import { XAxis, YAxis, ResponsiveContainer, BarChart, Bar, Tooltip } from 'recha
 
 const AdminHome = () => {
     const axiosSecure = useAxiosSecure();
-    
+
     const [isAdmin] = useAdmin();
     const { data: stats } = useQuery({
         queryKey: ['admin-stats'],
@@ -17,7 +17,7 @@ const AdminHome = () => {
         }
     })
 
-    
+
 
     const { data: chartData = [] } = useQuery({
         queryKey: ['chartData'],
@@ -26,7 +26,7 @@ const AdminHome = () => {
             return res.data;
         }
     });
-    
+
 
     return (
         <div className='w-full'>
@@ -36,26 +36,39 @@ const AdminHome = () => {
             </Helmet>
             {
                 isAdmin ? (
-                    <div className="stats shadow w-full">
+                    <div>
+                        <div className="stats shadow w-full">
 
-                        <div className="stat place-items-center">
-                            <div className="stat-title">Users</div>
-                            <div className="stat-value">{stats?.totalUser}</div>
-                            <div className="stat-desc"></div>
+                            <div className="stat place-items-center">
+                                <div className="stat-title">Users</div>
+                                <div className="stat-value">{stats?.totalUser}</div>
+                                <div className="stat-desc"></div>
+                            </div>
+
+                            <div className="stat place-items-center">
+                                <div className="stat-title">Total Jobs</div>
+                                <div className="stat-value text-secondary">{stats?.totalJobs}</div>
+                                <div className="stat-desc text-secondary"></div>
+                            </div>
+
+                            <div className="stat place-items-center">
+                                <div className="stat-title">Total Applicant{"'"}s</div>
+                                <div className="stat-value">{stats?.totalApplicant}</div>
+                                <div className="stat-desc"></div>
+                            </div>
+
                         </div>
 
-                        <div className="stat place-items-center">
-                            <div className="stat-title">Total Jobs</div>
-                            <div className="stat-value text-secondary">{stats?.totalJobs}</div>
-                            <div className="stat-desc text-secondary"></div>
+                        <div className='mt-9'>
+                            <ResponsiveContainer height={250} width="100%">
+                                <BarChart data={chartData} width={400} height={400}>
+                                    <XAxis dataKey="monthName" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Bar dataKey="applicationCount" fill="#8883d8" />
+                                </BarChart>
+                            </ResponsiveContainer>
                         </div>
-
-                        <div className="stat place-items-center">
-                            <div className="stat-title">Total Applicant{"'"}s</div>
-                            <div className="stat-value">{stats?.totalApplicant}</div>
-                            <div className="stat-desc"></div>
-                        </div>
-
                     </div>
                 ) : (
                     <div role="alert" className="alert alert-success">
@@ -65,16 +78,6 @@ const AdminHome = () => {
                 )
             }
 
-            <div className='mt-9'>
-                <ResponsiveContainer height={250} width="100%">
-                    <BarChart data={chartData} width={400} height={400}>
-                        <XAxis dataKey="monthName" />
-                        <YAxis />
-                        <Tooltip />
-                        <Bar dataKey="applicationCount" fill="#8883d8" />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
 
 
         </div>

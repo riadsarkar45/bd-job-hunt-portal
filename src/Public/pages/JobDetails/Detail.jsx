@@ -220,7 +220,7 @@ const Detail = () => {
                                         null
                                     ) : (
                                         <div className='bg-green-600 p-3 rounded-md opacity-40 text-white font-bold mt-4'>
-                                            {skill?.length} / {isMatch?.length} Matches with your profile you may be a good fit
+                                            {skill?.length} / {isMatch?.length} Skills matches with your profile you may be a good fit
                                         </div>
                                     )
                                 }
@@ -230,7 +230,7 @@ const Detail = () => {
                                     isNotMatch?.length <= 0 ? (
                                         null
                                     ) : (
-                                        <div className='flex gap-2 mt-2 bg-blue-300 p-3 rounded-md text-white font-bold bg-opacity-20 justify-between'>
+                                        <div className='flex gap-2 mt-2 bg-blue-500 p-3 rounded-md text-white font-bold bg-opacity-30 justify-between'>
                                             <div className='flex gap-3 items-center'>
                                                 Your missing skills:
                                                 <div>

@@ -58,7 +58,7 @@ const Home = () => {
                 </div>
             </div>
             <div className='grid lg:grid-cols-2 md:grid-cols-2 gap-5 mt-6'>
-
+srgsgrwwgsrgsrwgsgsfgsfegsfgs
                 <LineChart
                     width={500}
                     height={300}
