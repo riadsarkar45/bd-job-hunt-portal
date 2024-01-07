@@ -6,7 +6,7 @@ import SearchIcon from '@mui/icons-material/Search'; import { LinearProgress, Ca
 import useAxiosPublic from '../../../components/Hooks/useAxiosPublic';
 import AllJobSearch from './AllJobSearch/AllJobSearch';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-
+import LazyLoad from 'react-lazy-load';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -138,34 +138,46 @@ function AllJobs() {
           </div>
         </div>
         <div className='lg:ml-[15rem] lg:flex-grow-[1] lg:mt-[87px] lg:p-[20px]'>
-          {loading ? (
-            <div className="mt-10">
-              <LinearProgress />
-            </div>
-          ) : (
-            <div className="w-full mt-6">
-              {filtLoading ? (
-                <div className="mt-10">
-                  <LinearProgress />
-                </div>
-              ) : (
-                datas ? (
-                  filtJobs.map((data) => (
-                    <Card key={data._id} className="mb-4">
-                      <CardContent>
-                        <AllJobSearch data={data} />
-                      </CardContent>
-                    </Card>
-                  ))
-                ) : search ? (
 
-                  searchResult.length <= 0 ? (
-                    <div className='text-center mt-[10rem] text-red-300 font-sans text-2xl'>
-                      <SearchIcon sx={{ fontSize: "64px", color: "red" }} />
-                      <p>No result found</p>
-                    </div>
+          <LazyLoad height={762}>
+            {loading ? (
+              <div className="mt-10">
+                <LinearProgress />
+              </div>
+            ) : (
+              <div className="w-full mt-6">
+                {filtLoading ? (
+                  <div className="mt-10">
+                    <LinearProgress />
+                  </div>
+                ) : (
+                  datas ? (
+                    filtJobs.map((data) => (
+                      <Card key={data._id} className="mb-4">
+                        <CardContent>
+                          <AllJobSearch data={data} />
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : search ? (
+
+                    searchResult.length <= 0 ? (
+                      <div className='text-center mt-[10rem] text-red-300 font-sans text-2xl'>
+                        <SearchIcon sx={{ fontSize: "64px", color: "red" }} />
+                        <p>No result found</p>
+                      </div>
+                    ) : (
+                      searchResult.map((data) => (
+                        <Card key={data._id} className="mb-4">
+                          <CardContent>
+                            <AllJobSearch data={data} />
+                          </CardContent>
+                        </Card>
+                      ))
+                    )
+
                   ) : (
-                    searchResult.map((data) => (
+                    jobs.map((data) => (
                       <Card key={data._id} className="mb-4">
                         <CardContent>
                           <AllJobSearch data={data} />
@@ -173,19 +185,11 @@ function AllJobs() {
                       </Card>
                     ))
                   )
+                )}
+              </div>
+            )}
+          </LazyLoad>
 
-                ) : (
-                  jobs.map((data) => (
-                    <Card key={data._id} className="mb-4">
-                      <CardContent>
-                        <AllJobSearch data={data} />
-                      </CardContent>
-                    </Card>
-                  ))
-                )
-              )}
-            </div>
-          )}
         </div>
       </div>
 

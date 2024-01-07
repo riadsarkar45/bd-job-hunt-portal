@@ -9,6 +9,7 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import SearchResult from './SearchResult';
 import SearchIcon from '@mui/icons-material/Search';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -56,34 +57,6 @@ function Content() {
             <Helmet>
                 <title>BD Hunt || Find your next job here</title>
             </Helmet>
-            <div className='lg:flex md:flex justify-between'>
-                <div>
-                    <h2 className='text-5xl'>
-                        <Typewriter
-                            words={['Code', 'Build', 'Make']}
-                            loop={500}
-                            cursor
-                            cursorStyle='_'
-                            typeSpeed={80}
-                            deleteSpeed={70}
-                            delaySpeed={1000}
-                        />
-                        <Cursor />
-                    </h2>
-                    <h2 className='text-5xl'>For Everyone</h2>
-                    <p className='text-3xl mt-5'>Find your new tech job here</p>
-
-                    
-
-                </div>
-                <div>
-                    <img
-                        className='rounded-[19rem] w-[78%] h-[11rem]'
-                        src='https://i.ibb.co/cX6vDPJ/download-3.jpg'
-                        alt='engineer'
-                    />
-                </div>
-            </div>
             <form onSubmit={handleSearch}>
 
                 <div className='shadow-md mt-10 mb-10 bg-blue-200 bg-opacity-25 p-3 rounded-md lg:flex md:flex items-center w-full m-auto '>
@@ -117,6 +90,12 @@ function Content() {
                 </div>
 
             </form>
+
+            <div className="text-center">
+                <Link to='/allJobs'>
+                    <button className='btn btn-outline btn-md btn-primary'>Find Jobs</button>
+                </Link>
+            </div>
 
             {/* modal here */}
 
