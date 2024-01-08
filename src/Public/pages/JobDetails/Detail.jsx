@@ -36,7 +36,7 @@ const Detail = () => {
     const [isNotMatch, setIsNotMatch] = useState([])
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(null)
-    const { roleName, salary, skill, experience, type, content, location, status, companyName } = data;
+    const { roleName, salary, skill, experience, type, content, location, status, companyName, companySite } = data;
 
     const { data: userSkill = [], isLoading, refetch } = useQuery({
         queryKey: ['users'],
@@ -124,7 +124,7 @@ const Detail = () => {
                 });
                 axiosPublic.post('/applicationMonth', dataToInsert)
                     .then(() => {
-                        
+
                     })
                 handleClose();
             })
@@ -167,8 +167,15 @@ const Detail = () => {
                                 status === 'stop' ? (
                                     <button disabled onClick={() => document.getElementById('my_modal_3').showModal()} className='btn btn-sm btn-primary btn-outline'>Apply</button>
                                 ) : (
-                                    <button onClick={() => document.getElementById('my_modal_3').showModal()} className='btn btn-sm btn-primary btn-outline'>Apply</button>
-                                )
+                                    <a
+                                        href={companySite}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        className='btn btn-sm btn-primary btn-outline'
+                                    >
+                                        Apply On Company Site
+                                    </a>
+                                    )
                             }
                         </div>
                     </div>

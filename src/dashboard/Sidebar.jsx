@@ -102,18 +102,6 @@ function Sidebar(props) {
                                 </ListItemButton>
                             </ListItem>
 
-
-                            <ListItem disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <Link to={`/dashboard/application/${user?.email}`}>
-                                        <ListItemText>Applicant's</ListItemText>
-                                    </Link>
-                                </ListItemButton>
-                            </ListItem>
-
                         </>
                     ) : (
                         null
@@ -183,7 +171,9 @@ function Sidebar(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        BD Job Hunt
+                        <div>
+                            <h2 className='font-serif'>SkillSync</h2>
+                        </div>
 
                     </Typography>
                 </Toolbar>

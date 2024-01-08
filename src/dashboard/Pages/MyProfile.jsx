@@ -72,21 +72,15 @@ const MyProfile = () => {
         console.log('Updating user profile with data:', dataToInsert);
 
         axiosPublic.patch(`/users/${email}`, dataToInsert)
-            .then(res => {
-                if (res.data.message === '300') {
-                    Swal.fire({
-                        title: "Skill Exist!",
-                        icon: "error"
-                    });
-                    handleClose1();
-                } else {
-                    Swal.fire({
-                        title: "Good job!",
-                        text: "Now you can match your job and apply!",
-                        icon: "success"
-                    });
-                    handleClose1();
-                }
+            .then(() => {
+
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Now you can match your job and apply!",
+                    icon: "success"
+                });
+                handleClose1();
+
             })
             .catch(error => {
                 console.error(error.message);
@@ -110,7 +104,7 @@ const MyProfile = () => {
             <Helmet>
                 <title>My Profile</title>
             </Helmet>
-            <div className='bg-red-100 p-3 rounded-md mb-4'>
+            <div className='bg-blue-100 p-3 rounded-md mb-4'>
                 <h2 className='text-2xl'>Resume</h2>
                 {
                     resume?.length <= 0 ? (
@@ -134,13 +128,13 @@ const MyProfile = () => {
                     )
                 }
             </div>
-            <div className='bg-red-100 p-3 rounded-md flex justify-between w-full'>
+            <div className='bg-blue-100 p-3 rounded-md flex justify-between w-full'>
                 <div className='w-[30rem]'>
                     <h2 className='mb-4 text-2xl text-gray-600'>Skills</h2>
                     {
                         skills?.length <= 0 ? (
 
-                            <div className='bg-red-200 text-center p-4 m-auto text-2xl text-red-500'>Set Skill to match the job and apply</div>
+                            <div className='bg-red-200 bg-opacity-50 text-center p-4 m-auto text-2xl text-red-500'>Set Skill to match the job and apply</div>
 
                         ) : (
                             skills?.map(s =>
